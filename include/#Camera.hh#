@@ -1,0 +1,17 @@
+#ifndef __CAMERA_HH__
+#define __CAMERA_HH__
+
+#include <SFML/System/Vector3.hpp>
+
+class Camera
+{
+public:
+  Camera();
+  ~Camera();
+
+  void	up();
+private:
+  sf::Vector3f	_position;
+};
+
+#endif

@@ -1,0 +1,109 @@
+#include "Player.hh"
+#include "rotation.h"
+
+Player::Player(const sf::Vector3f &position, Camera *cam)
+  : _position(position),
+    _color(sf::Color(0, 255, 255)),
+    _block(position, sf::Vector3f(1, 1, 1), _color)
+{
+  _avance = 0;
+  _cote = 0;
+  _v.x = 1;
+  _v.y = 0;
+  _v.z = 0;
+
+  _cam = cam;
+}
+
+Player::~Player()
+{
+
+}
+
+void
+Player::draw()
+{
+  _block.draw();
+}
+
+void
+Player::space()
+{
+  
+}
+
+sf::Color
+Player::getColor() const
+{
+  return (_color);
+}
+
+void
+Player::update()
+{
+  _r = _cam->getR();
+
+  _v.x = 1;
+  _v.y = 0;
+  _v.z = 0;
+  rotation_z(_r.z, _v);
+  if (_avance != 0)
+    {
+      _avance = (_avance < 0 ? _avance +  0.01 : _avance - 0.01);
+      if (_avance >= -.01 && _avance <= .01)
+        {
+          _avance = 0;
+        }
+      _position.x += _v.x * _avance;
+      _position.y += _v.y * _avance;
+      _cam->setPl(_position);
+      _block.setPosition(_position);
+    }
+  if (_cote != 0)
+    {
+      rotation_z(-PI / 2, _v);
+      _cote = (_cote < 0 ? _cote +  0.01 : _cote - 0.01);
+      if (_cote >= -.01 && _cote <= .01)
+        {
+          _cote = 0;
+        }
+      _position.x += _v.x * _cote;
+      _position.y += _v.y * _cote;
+      _cam->setPl(_position);
+      _block.setPosition(_position);
+    }
+}
+
+void
+Player::up()
+{
+  _avance = -0.2;
+  /*  _position.x -= _v.x * 0.1;
+  _position.y -= _v.y * 0.1;
+  _cam->setPl(_position);
+  _block.setPosition(_position);*/
+}
+
+void
+Player::down()
+{
+  _avance = 0.2;
+}
+
+void
+Player::left()
+{
+  _cote = 0.2;
+}
+
+void
+Player::right()
+{
+  _cote = -0.2;
+}
+
+sf::Vector3f
+Player::getPos() const
+{
+  return (_position);
+}
